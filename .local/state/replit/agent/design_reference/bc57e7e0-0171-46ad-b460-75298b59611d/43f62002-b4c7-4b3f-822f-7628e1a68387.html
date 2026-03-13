@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Location Intelligence Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1976D2',
+                        secondary: '#FF6B6B',
+                        success: '#4CAF50',
+                        warning: '#FF9800'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="font-inter bg-gray-50 text-gray-800">
+    <!-- @COMPONENT: MainLayout -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- @COMPONENT: Sidebar -->
+        <div class="w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">Crisis Intel</h1>
+                        <p class="text-sm text-gray-500">Location & Resource Dashboard</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <!-- @COMPONENT: TextInputPanel -->
+            <div class="flex-1 flex flex-col p-6 space-y-6 overflow-y-auto">
+                <div>
+                    <h2 class="text-lg font-semibold mb-4 text-gray-900">Process Report</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Input Text Report <span class="text-secondary">*</span>
+                            </label>
+                            <textarea 
+                                data-mock="true"
+                                placeholder="Enter disaster report text (supports abbreviations, local languages, typos)..." 
+                                class="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                                data-implementation="Should handle multilingual input and fuzzy matching"
+                            >Emergency in TN area near chenai. 500 families need food and शेल्टर. Location: New Dlhi metro station, தமிழ்நாடு state</textarea>
+                        </div>
+                        <button 
+                            class="w-full bg-primary text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                            data-event="click:processReport"
+                            data-implementation="Should trigger NLP processing using spaCy and fuzzy matching"
+                        >
+                            <i class="fas fa-cog mr-2"></i>
+                            Process Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Extracted Locations -->
+                <!-- @COMPONENT: LocationResults -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-md font-semibold mb-4 text-gray-900 flex items-center">
+                        <i class="fas fa-search mr-2 text-primary"></i>
+                        Extracted Locations
+                    </h3>
+                    <div class="space-y-3">
+                        <!-- @MAP: extractedLocations.map(location => ( -->
+                        <div class="bg-gray-50 p-3 rounded-lg" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-medium text-gray-900" data-bind="location.standardized">Tamil Nadu</span>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Original: <span data-bind="location.original">"TN"</span> | 
+                                        Confidence: <span class="text-success font-medium" data-bind="location.confidence">95%</span>
+                                    </div>
+                                </div>
+                                <button class="text-primary hover:text-blue-700" data-event="click:showOnMap">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded-lg" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-medium text-gray-900">Chennai</span>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Original: "chenai" | 
+                                        Confidence: <span class="text-success font-medium">88%</span>
+                                    </div>
+                                </div>
+                                <button class="text-primary hover:text-blue-700">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded-lg" data-mock="true">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-medium text-gray-900">New Delhi</span>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Original: "New Dlhi" | 
+                                        Confidence: <span class="text-warning font-medium">76%</span>
+                                    </div>
+                                </div>
+                                <button class="text-primary hover:text-blue-700">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+
+                <!-- Quick Search -->
+                <!-- @COMPONENT: LocationSearch -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-md font-semibold mb-4 text-gray-900">Quick Location Search</h3>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="Search locations..."
+                            class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            data-implementation="Should implement fuzzy search with autocomplete"
+                        />
+                        <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <!-- @COMPONENT: TopNavigation -->
+            <div class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Crisis Resource Dashboard</h2>
+                        <div class="flex items-center space-x-2 text-sm text-gray-500">
+                            <i class="fas fa-sync-alt animate-spin text-primary"></i>
+                            <span>Last updated: <span data-bind="lastUpdate" data-mock="true">2 minutes ago</span></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Status Indicator -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-success rounded-full animate-pulse"></div>
+                            <span class="text-sm font-medium text-gray-700">System Online</span>
+                        </div>
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-download mr-2"></i>
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- Map Section -->
+                <!-- @COMPONENT: InteractiveMap -->
+                <div class="flex-1 relative">
+                    <div id="map" class="w-full h-full" data-implementation="Implement Leaflet.js map with crisis location markers"></div>
+                    
+                    <!-- Map Controls Overlay -->
+                    <div class="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-3 space-y-2">
+                        <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary w-full text-left p-2 rounded hover:bg-gray-50">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Layers</span>
+                        </button>
+                        <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary w-full text-left p-2 rounded hover:bg-gray-50">
+                            <i class="fas fa-filter"></i>
+                            <span>Filters</span>
+                        </button>
+                        <button class="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-primary w-full text-left p-2 rounded hover:bg-gray-50">
+                            <i class="fas fa-crosshairs"></i>
+                            <span>My Location</span>
+                        </button>
+                    </div>
+
+                    <!-- Map Legend -->
+                    <div class="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs">
+                        <h4 class="font-semibold text-sm text-gray-900 mb-3">Crisis Severity Legend</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                <span class="text-xs text-gray-700">Critical (>80% shortage)</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-warning rounded-full"></div>
+                                <span class="text-xs text-gray-700">High (50-80% shortage)</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                <span class="text-xs text-gray-700">Medium (20-50% shortage)</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-success rounded-full"></div>
+                                <span class="text-xs text-gray-700">Low (<20% shortage)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Statistics -->
+                <!-- @COMPONENT: StatisticsPanel -->
+                <div class="w-96 bg-white border-l border-gray-200 overflow-y-auto">
+                    <div class="p-6 space-y-6">
+                        <!-- Resource Overview Cards -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Resource Status Overview</h3>
+                            <div class="grid grid-cols-1 gap-4">
+                                <!-- Food Status Card -->
+                                <div class="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-lg border border-red-200" data-mock="true">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-utensils text-red-600"></i>
+                                            <span class="font-medium text-gray-900">Food</span>
+                                        </div>
+                                        <span class="text-sm font-bold text-red-600" data-bind="foodShortage">67% Shortage</span>
+                                    </div>
+                                    <div class="w-full bg-red-200 rounded-full h-2">
+                                        <div class="bg-red-600 h-2 rounded-full" style="width: 67%"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-2" data-bind="foodAffected">2,341 families affected</p>
+                                </div>
+
+                                <!-- Shelter Status Card -->
+                                <div class="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200" data-mock="true">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-home text-orange-600"></i>
+                                            <span class="font-medium text-gray-900">Shelter</span>
+                                        </div>
+                                        <span class="text-sm font-bold text-orange-600" data-bind="shelterShortage">45% Shortage</span>
+                                    </div>
+                                    <div class="w-full bg-orange-200 rounded-full h-2">
+                                        <div class="bg-orange-600 h-2 rounded-full" style="width: 45%"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-2" data-bind="shelterAffected">1,567 families affected</p>
+                                </div>
+
+                                <!-- Medical Status Card -->
+                                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200" data-mock="true">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center space-x-2">
+                                            <i class="fas fa-medkit text-yellow-600"></i>
+                                            <span class="font-medium text-gray-900">Medical</span>
+                                        </div>
+                                        <span class="text-sm font-bold text-yellow-600" data-bind="medicalShortage">23% Shortage</span>
+                                    </div>
+                                    <div class="w-full bg-yellow-200 rounded-full h-2">
+                                        <div class="bg-yellow-600 h-2 rounded-full" style="width: 23%"></div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mt-2" data-bind="medicalAffected">892 people affected</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Charts -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Resource Trends</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <canvas id="resourceChart" width="300" height="200" data-implementation="Implement Chart.js line chart showing resource shortage trends over time"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Location Statistics -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Location Statistics</h3>
+                            <div class="space-y-3">
+                                <!-- @MAP: locationStats.map(stat => ( -->
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                    <div>
+                                        <span class="font-medium text-gray-900" data-bind="stat.location">Tamil Nadu</span>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            <span data-bind="stat.reports">23 reports</span> • 
+                                            <span data-bind="stat.severity" class="text-red-600 font-medium">Critical</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-gray-900" data-bind="stat.affected">3.2K</div>
+                                        <div class="text-xs text-gray-500">affected</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                    <div>
+                                        <span class="font-medium text-gray-900">Chennai</span>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            <span>15 reports</span> • 
+                                            <span class="text-orange-600 font-medium">High</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-gray-900">1.8K</div>
+                                        <div class="text-xs text-gray-500">affected</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                    <div>
+                                        <span class="font-medium text-gray-900">New Delhi</span>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            <span>8 reports</span> • 
+                                            <span class="text-yellow-600 font-medium">Medium</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-sm font-bold text-gray-900">945</div>
+                                        <div class="text-xs text-gray-500">affected</div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+                        </div>
+
+                        <!-- Error Log (when applicable) -->
+                        <!-- @COMPONENT: ErrorDisplay -->
+                        <div class="border-t border-gray-200 pt-6" data-mock="true">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900 flex items-center">
+                                <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                                Processing Alerts
+                            </h3>
+                            <div class="space-y-2">
+                                <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-exclamation-circle text-warning text-sm mt-0.5"></i>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Low confidence location</p>
+                                            <p class="text-xs text-gray-600">Location "Dlhi" matched to "New Delhi" with 76% confidence</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg">
+                                    <div class="flex items-start space-x-2">
+                                        <i class="fas fa-info-circle text-primary text-sm mt-0.5"></i>
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">Multilingual text detected</p>
+                                            <p class="text-xs text-gray-600">Successfully processed English, Hindi, and Tamil text</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: StatisticsPanel -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+
+    <script>
+        (function() {
+            // TODO: Implement business logic, API calls, and state management
+            
+            // Initialize map
+            const map = L.map('map').setView([20.5937, 78.9629], 5); // Center on India
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Mock crisis location markers
+            const crisisLocations = [
+                {lat: 13.0827, lng: 80.2707, name: 'Chennai', severity: 'critical', affected: 1800},
+                {lat: 28.7041, lng: 77.1025, name: 'New Delhi', severity: 'medium', affected: 945},
+                {lat: 11.1271, lng: 78.6569, name: 'Tamil Nadu Region', severity: 'high', affected: 3200}
+            ];
+
+            // Add markers to map
+            crisisLocations.forEach(location => {
+                let color = '#ef4444'; // red for critical
+                if (location.severity === 'high') color = '#f59e0b'; // orange
+                if (location.severity === 'medium') color = '#eab308'; // yellow
+                if (location.severity === 'low') color = '#22c55e'; // green
+
+                const marker = L.circleMarker([location.lat, location.lng], {
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.7,
+                    radius: Math.sqrt(location.affected) / 10 + 8
+                }).addTo(map);
+
+                marker.bindPopup(`
+                    <div class="p-2">
+                        <h3 class="font-semibold">${location.name}</h3>
+                        <p class="text-sm text-gray-600">Severity: <span class="font-medium">${location.severity}</span></p>
+                        <p class="text-sm text-gray-600">Affected: <span class="font-medium">${location.affected}</span></p>
+                    </div>
+                `);
+            });
+
+            // Initialize resource trend chart
+            const ctx = document.getElementById('resourceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Today'],
+                    datasets: [
+                        {
+                            label: 'Food Shortage %',
+                            data: [45, 52, 61, 58, 64, 69, 67],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Shelter Shortage %',
+                            data: [30, 35, 42, 38, 43, 46, 45],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Medical Shortage %',
+                            data: [15, 18, 22, 19, 21, 24, 23],
+                            borderColor: '#eab308',
+                            backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 15,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Mock interactive functionality
+            document.querySelectorAll('[data-event*="click"]').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    // Simulate loading state
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+                    this.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.disabled = false;
+                        
+                        // Show mock success feedback
+                        const alert = document.createElement('div');
+                        alert.className = 'fixed top-4 right-4 bg-success text-white px-4 py-2 rounded-lg shadow-lg z-50';
+                        alert.innerHTML = '<i class="fas fa-check mr-2"></i>Processing completed successfully';
+                        document.body.appendChild(alert);
+                        
+                        setTimeout(() => alert.remove(), 3000);
+                    }, 2000);
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

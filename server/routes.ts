@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertReportSchema, insertLocationSchema, insertChatMessageSchema } from "@shared/schema";
 import { extractLocationsFromText, getLocationCoordinates, calculateResourceSeverity } from "./services/nlp";
 import { cohereService } from "./services/cohere";
+import { identifyGeospatialEntities, formatGeospatialOutput } from "./services/geospatial-query";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Location extraction endpoint
@@ -61,6 +62,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Location extraction error:", error);
       res.status(500).json({ message: "Failed to extract locations" });
+    }
+  });
+
+  // Geospatial query endpoint
+  app.post("/api/geospatial-query", async (req, res) => {
+    try {
+      const { query } = req.body;
+      
+      if (!query || typeof query !== 'string') {
+        return res.status(400).json({ message: "Query text is required" });
+      }
+
+      // Identify geospatial entities
+      const entities = identifyGeospatialEntities(query);
+      
+      res.json({
+        query,
+        entities,
+        formattedOutput: formatGeospatialOutput(query),
+        entityCount: entities.length
+      });
+    } catch (error) {
+      console.error("Geospatial query error:", error);
+      res.status(500).json({ message: "Failed to process geospatial query" });
     }
   });
 

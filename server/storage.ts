@@ -127,7 +127,15 @@ export class MemStorage implements IStorage {
 
   async createLocation(insertLocation: InsertLocation): Promise<Location> {
     const id = randomUUID();
-    const location: Location = { ...insertLocation, id, createdAt: new Date() };
+    const location: Location = { 
+      ...insertLocation, 
+      id, 
+      createdAt: new Date(),
+      state: insertLocation.state ?? null,
+      country: insertLocation.country ?? "",
+      latitude: insertLocation.latitude ?? null,
+      longitude: insertLocation.longitude ?? null
+    };
     this.locations.set(id, location);
     return location;
   }
@@ -152,7 +160,14 @@ export class MemStorage implements IStorage {
 
   async createReport(insertReport: InsertReport): Promise<Report> {
     const id = randomUUID();
-    const report: Report = { ...insertReport, id, extractedLocations: [], createdAt: new Date() };
+    const report: Report = { 
+      ...insertReport, 
+      id, 
+      extractedLocations: [], 
+      createdAt: new Date(),
+      reportType: insertReport.reportType || "disaster",
+      severity: insertReport.severity || "medium"
+    };
     this.reports.set(id, report);
     return report;
   }

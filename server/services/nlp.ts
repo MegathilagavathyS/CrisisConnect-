@@ -5,9 +5,9 @@ interface ExtractedLocation {
   state?: string;
 }
 
-// Common abbreviations and their standardized forms
+// Comprehensive multilingual location mappings
 const LOCATION_MAPPINGS = new Map([
-  // Indian states
+  // Indian states - English variations
   ["tn", "Tamil Nadu"],
   ["tamilnadu", "Tamil Nadu"],
   ["tamil nadu", "Tamil Nadu"],
@@ -22,26 +22,248 @@ const LOCATION_MAPPINGS = new Map([
   ["kerala", "Kerala"],
   ["ka", "Karnataka"],
   ["karnataka", "Karnataka"],
+  ["ap", "Andhra Pradesh"],
+  ["andhra pradesh", "Andhra Pradesh"],
+  ["ts", "Telangana"],
+  ["telangana", "Telangana"],
+  ["up", "Uttar Pradesh"],
+  ["uttar pradesh", "Uttar Pradesh"],
+  ["mp", "Madhya Pradesh"],
+  ["madhya pradesh", "Madhya Pradesh"],
+  ["rj", "Rajasthan"],
+  ["rajasthan", "Rajasthan"],
+  ["gj", "Gujarat"],
+  ["gujarat", "Gujarat"],
+  ["pb", "Punjab"],
+  ["punjab", "Punjab"],
+  ["hr", "Haryana"],
+  ["haryana", "Haryana"],
+  ["jk", "Jammu and Kashmir"],
+  ["jammu and kashmir", "Jammu and Kashmir"],
+  ["hp", "Himachal Pradesh"],
+  ["himachal pradesh", "Himachal Pradesh"],
+  ["or", "Odisha"],
+  ["odisha", "Odisha"],
+  ["orissa", "Odisha"],
+  ["jh", "Jharkhand"],
+  ["jharkhand", "Jharkhand"],
+  ["cg", "Chhattisgarh"],
+  ["chhattisgarh", "Chhattisgarh"],
+  ["br", "Bihar"],
+  ["bihar", "Bihar"],
+  ["as", "Assam"],
+  ["assam", "Assam"],
   
-  // Cities
+  // Cities - English variations and common misspellings
   ["mumbai", "Mumbai"],
   ["bombay", "Mumbai"],
   ["calcutta", "Kolkata"],
   ["kolkata", "Kolkata"],
   ["bangalore", "Bangalore"],
   ["bengaluru", "Bangalore"],
+  ["blr", "Bangalore"],
   ["chennai", "Chennai"],
   ["madras", "Chennai"],
   ["hyderabad", "Hyderabad"],
+  ["hyd", "Hyderabad"],
   ["pune", "Pune"],
   ["ahmedabad", "Ahmedabad"],
+  ["surat", "Surat"],
+  ["kochi", "Kochi"],
+  ["cochin", "Kochi"],
+  ["coimbatore", "Coimbatore"],
+  ["lucknow", "Lucknow"],
+  ["kanpur", "Kanpur"],
+  ["nagpur", "Nagpur"],
+  ["indore", "Indore"],
+  ["thane", "Thane"],
+  ["bhopal", "Bhopal"],
+  ["visakhapatnam", "Visakhapatnam"],
+  ["vizag", "Visakhapatnam"],
+  ["patna", "Patna"],
+  ["vadodara", "Vadodara"],
+  ["ghaziabad", "Ghaziabad"],
+  ["ludhiana", "Ludhiana"],
+  ["agra", "Agra"],
+  ["nashik", "Nashik"],
+  ["faridabad", "Faridabad"],
+  ["meerut", "Meerut"],
+  ["rajkot", "Rajkot"],
+  ["kalyan", "Kalyan"],
+  ["vasai", "Vasai"],
+  ["varanasi", "Varanasi"],
+  ["srinagar", "Srinagar"],
+  ["aurangabad", "Aurangabad"],
+  ["dhanbad", "Dhanbad"],
+  ["amritsar", "Amritsar"],
+  ["navi mumbai", "Navi Mumbai"],
+  ["allahabad", "Prayagraj"],
+  ["prayagraj", "Prayagraj"],
+  ["guwahati", "Guwahati"],
+  ["chandigarh", "Chandigarh"],
+  ["jodhpur", "Jodhpur"],
+  ["madurai", "Madurai"],
+  ["raipur", "Raipur"],
+  ["kota", "Kota"],
+  ["gwalior", "Gwalior"],
+  ["vijayawada", "Vijayawada"],
+  ["mysore", "Mysore"],
+  ["mysuru", "Mysore"],
   
-  // Multilingual examples (simplified - in real implementation, use proper NLP library)
+  // Hindi/Devanagari script
   ["तमिलनाडु", "Tamil Nadu"],
+  ["तमिल नाडु", "Tamil Nadu"],
   ["दिल्ली", "Delhi"],
+  ["नई दिल्ली", "New Delhi"],
   ["मुंबई", "Mumbai"],
+  ["कोलकाता", "Kolkata"],
+  ["कलकत्ता", "Kolkata"],
+  ["बेंगलुरु", "Bangalore"],
+  ["बैंगलोर", "Bangalore"],
+  ["चेन्नई", "Chennai"],
+  ["मद्रास", "Chennai"],
+  ["हैदराबाद", "Hyderabad"],
+  ["पुणे", "Pune"],
+  ["अहमदाबाद", "Ahmedabad"],
+  ["महाराष्ट्र", "Maharashtra"],
+  ["पश्चिम बंगाल", "West Bengal"],
+  ["केरल", "Kerala"],
+  ["कर्नाटक", "Karnataka"],
+  ["आंध्र प्रदेश", "Andhra Pradesh"],
+  ["तेलंगाना", "Telangana"],
+  ["उत्तर प्रदेश", "Uttar Pradesh"],
+  ["मध्य प्रदेश", "Madhya Pradesh"],
+  ["राजस्थान", "Rajasthan"],
+  ["गुजरात", "Gujarat"],
+  ["पंजाब", "Punjab"],
+  ["हरियाणा", "Haryana"],
+  ["जम्मू और कश्मीर", "Jammu and Kashmir"],
+  ["हिमाचल प्रदेश", "Himachal Pradesh"],
+  ["ओडिशा", "Odisha"],
+  ["झारखंड", "Jharkhand"],
+  ["छत्तीसगढ़", "Chhattisgarh"],
+  ["बिहार", "Bihar"],
+  ["असम", "Assam"],
+  
+  // Bengali script
+  ["পশ্চিমবঙ্গ", "West Bengal"],
+  ["কলকাতা", "Kolkata"],
   ["চেন্নাই", "Chennai"],
-  ["કોલકાતા", "Kolkata"]
+  ["মুম্বাই", "Mumbai"],
+  ["দিল্লি", "Delhi"],
+  ["নতুন দিল্লি", "New Delhi"],
+  ["বাংলাদেশ", "Bangladesh"],
+  ["আসাম", "Assam"],
+  
+  // Tamil script
+  ["தமிழ்நாடு", "Tamil Nadu"],
+  ["சென்னை", "Chennai"],
+  ["கோவை", "Coimbatore"],
+  ["மதுரை", "Madurai"],
+  ["திருச்சி", "Tiruchirappalli"],
+  ["சேலம்", "Salem"],
+  ["திருநெல்வேலி", "Tirunelveli"],
+  ["கேரளா", "Kerala"],
+  ["கர்நாடகா", "Karnataka"],
+  ["ஆந்திரப்பிரதேசம்", "Andhra Pradesh"],
+  
+  // Telugu script
+  ["తెలంగాణ", "Telangana"],
+  ["ఆంధ్రప్రదేశ్", "Andhra Pradesh"],
+  ["హైదరాబాద్", "Hyderabad"],
+  ["విజయవాడ", "Vijayawada"],
+  ["విశాఖపట్నం", "Visakhapatnam"],
+  ["తిరుపతి", "Tirupati"],
+  ["కర్నాటక", "Karnataka"],
+  ["తమిళనాడు", "Tamil Nadu"],
+  
+  // Gujarati script
+  ["ગુજરાત", "Gujarat"],
+  ["અમદાવાદ", "Ahmedabad"],
+  ["સુરત", "Surat"],
+  ["વડોદરા", "Vadodara"],
+  ["રાજકોટ", "Rajkot"],
+  ["મહારાષ્ટ્ર", "Maharashtra"],
+  ["મુંબઈ", "Mumbai"],
+  ["કોલકાતા", "Kolkata"],
+  
+  // Kannada script
+  ["ಕರ್ನಾಟಕ", "Karnataka"],
+  ["ಬೆಂಗಳೂರು", "Bangalore"],
+  ["ಮೈಸೂರು", "Mysore"],
+  ["ಹುಬ್ಳಿ", "Hubli"],
+  ["ಮಂಗಳೂರು", "Mangalore"],
+  ["ತಮಿಳುನಾಡು", "Tamil Nadu"],
+  ["ಕೇರಳ", "Kerala"],
+  ["ಆಂಧ್ರಪ್ರದೇಶ", "Andhra Pradesh"],
+  
+  // Malayalam script
+  ["കേരളം", "Kerala"],
+  ["കൊച്ചി", "Kochi"],
+  ["കോഴിക്കോട്", "Kozhikode"],
+  ["തിരുവനന്തപുരം", "Thiruvananthapuram"],
+  ["കണ്ണൂർ", "Kannur"],
+  ["തൃശൂർ", "Thrissur"],
+  ["കർണാടക", "Karnataka"],
+  ["തമിഴ്നാട്", "Tamil Nadu"],
+  
+  // Punjabi script (Gurmukhi)
+  ["ਪੰਜਾਬ", "Punjab"],
+  ["ਚੰਡੀਗੜ੍ਹ", "Chandigarh"],
+  ["ਅੰਮ੍ਰਿਤਸਰ", "Amritsar"],
+  ["ਲੁਧਿਆਣਾ", "Ludhiana"],
+  ["ਜਲੰਧਰ", "Jalandhar"],
+  ["ਹਰਿਆਣਾ", "Haryana"],
+  ["ਦਿੱਲੀ", "Delhi"],
+  
+  // Marathi (Devanagari)
+  ["महाराष्ट्र", "Maharashtra"],
+  ["मुंबई", "Mumbai"],
+  ["पुणे", "Pune"],
+  ["नागपूर", "Nagpur"],
+  ["नाशिक", "Nashik"],
+  ["औरंगाबाद", "Aurangabad"],
+  ["सोलापूर", "Solapur"],
+  
+  // Oriya script
+  ["ଓଡ଼ିଶା", "Odisha"],
+  ["ଭୁବନେଶ୍ୱର", "Bhubaneswar"],
+  ["କଟକ", "Cuttack"],
+  ["ରାଉରକେଲା", "Rourkela"],
+  
+  // Common misspellings and variations
+  ["deli", "Delhi"],
+  ["delhy", "Delhi"],
+  ["dlhi", "Delhi"],
+  ["mumby", "Mumbai"],
+  ["mumbai", "Mumbai"],
+  ["kolkatta", "Kolkata"],
+  ["calcuta", "Kolkata"],
+  ["bangalor", "Bangalore"],
+  ["bangaluru", "Bangalore"],
+  ["bengluru", "Bangalore"],
+  ["chenai", "Chennai"],
+  ["madrs", "Chennai"],
+  ["hydrabad", "Hyderabad"],
+  ["haiderabad", "Hyderabad"],
+  ["ahmdabad", "Ahmedabad"],
+  ["ahemdabad", "Ahmedabad"],
+  
+  // Regional variations and local names
+  ["silicon city", "Bangalore"],
+  ["garden city", "Bangalore"],
+  ["it city", "Bangalore"],
+  ["bollywood city", "Mumbai"],
+  ["financial capital", "Mumbai"],
+  ["city of joy", "Kolkata"],
+  ["detroit of india", "Chennai"],
+  ["nizams city", "Hyderabad"],
+  ["cyberabad", "Hyderabad"],
+  ["pink city", "Jaipur"],
+  ["blue city", "Jodhpur"],
+  ["golden city", "Jaisalmer"],
+  ["venice of the east", "Kochi"],
+  ["queen of arabian sea", "Kochi"],
 ]);
 
 // Simple fuzzy matching using Levenshtein distance
@@ -91,55 +313,241 @@ function findBestMatch(input: string, candidates: string[]): { match: string; co
   return bestScore > 0.6 ? { match: bestMatch, confidence: bestScore } : null;
 }
 
+// Enhanced function to detect script and language
+function detectScript(text: string): string {
+  // Unicode ranges for different scripts
+  const scriptRanges = {
+    devanagari: /[\u0900-\u097F]/,
+    bengali: /[\u0980-\u09FF]/,
+    tamil: /[\u0B80-\u0BFF]/,
+    telugu: /[\u0C00-\u0C7F]/,
+    kannada: /[\u0C80-\u0CFF]/,
+    malayalam: /[\u0D00-\u0D7F]/,
+    gujarati: /[\u0A80-\u0AFF]/,
+    gurmukhi: /[\u0A00-\u0A7F]/,
+    oriya: /[\u0B00-\u0B7F]/,
+    english: /[A-Za-z]/,
+  };
+  
+  const detectedScripts: string[] = [];
+  for (const [script, regex] of Object.entries(scriptRanges)) {
+    if (regex.test(text)) {
+      detectedScripts.push(script);
+    }
+  }
+  
+  return detectedScripts.join(',') || 'unknown';
+}
+
+// Enhanced function to preprocess multilingual text
+function preprocessMultilingualText(text: string): string[] {
+  // Split text by various delimiters including Unicode whitespace
+  const segments = text.split(/[\s,\.;!?\u00A0\u2000-\u200A\u2028\u2029\u3000]+/)
+    .filter(segment => segment.length > 0);
+  
+  const processedSegments: string[] = [];
+  
+  for (const segment of segments) {
+    // Convert to lowercase for English text only
+    if (/^[A-Za-z0-9\-\.]+$/.test(segment)) {
+      processedSegments.push(segment.toLowerCase());
+    } else {
+      // Keep original case for non-English scripts
+      processedSegments.push(segment);
+    }
+    
+    // Also add cleaned version without punctuation
+    const cleaned = segment.replace(/[^\u0900-\u097F\u0980-\u09FF\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F\u0A80-\u0AFF\u0A00-\u0A7F\u0B00-\u0B7F\w]/g, '');
+    if (cleaned && cleaned !== segment && cleaned.length > 1) {
+      processedSegments.push(/^[A-Za-z0-9\-\.]+$/.test(cleaned) ? cleaned.toLowerCase() : cleaned);
+    }
+  }
+  
+  return processedSegments;
+}
+
+// Enhanced function to extract state information
+function inferStateFromLocation(locationName: string): string | undefined {
+  const stateMapping = {
+    "Mumbai": "Maharashtra",
+    "Pune": "Maharashtra",
+    "Nagpur": "Maharashtra",
+    "Nashik": "Maharashtra",
+    "Aurangabad": "Maharashtra",
+    "Thane": "Maharashtra",
+    "Solapur": "Maharashtra",
+    
+    "Delhi": "Delhi",
+    "New Delhi": "Delhi",
+    
+    "Bangalore": "Karnataka",
+    "Mysore": "Karnataka",
+    "Hubli": "Karnataka",
+    "Mangalore": "Karnataka",
+    
+    "Chennai": "Tamil Nadu",
+    "Coimbatore": "Tamil Nadu",
+    "Madurai": "Tamil Nadu",
+    "Tiruchirappalli": "Tamil Nadu",
+    "Salem": "Tamil Nadu",
+    "Tirunelveli": "Tamil Nadu",
+    
+    "Kolkata": "West Bengal",
+    
+    "Hyderabad": "Telangana",
+    
+    "Visakhapatnam": "Andhra Pradesh",
+    "Vijayawada": "Andhra Pradesh",
+    "Tirupati": "Andhra Pradesh",
+    
+    "Kochi": "Kerala",
+    "Kozhikode": "Kerala",
+    "Thiruvananthapuram": "Kerala",
+    "Kannur": "Kerala",
+    "Thrissur": "Kerala",
+    
+    "Ahmedabad": "Gujarat",
+    "Surat": "Gujarat",
+    "Vadodara": "Gujarat",
+    "Rajkot": "Gujarat",
+    
+    "Lucknow": "Uttar Pradesh",
+    "Kanpur": "Uttar Pradesh",
+    "Ghaziabad": "Uttar Pradesh",
+    "Agra": "Uttar Pradesh",
+    "Varanasi": "Uttar Pradesh",
+    "Meerut": "Uttar Pradesh",
+    "Prayagraj": "Uttar Pradesh",
+    
+    "Indore": "Madhya Pradesh",
+    "Bhopal": "Madhya Pradesh",
+    "Gwalior": "Madhya Pradesh",
+    
+    "Jaipur": "Rajasthan",
+    "Jodhpur": "Rajasthan",
+    "Kota": "Rajasthan",
+    
+    "Amritsar": "Punjab",
+    "Ludhiana": "Punjab",
+    "Jalandhar": "Punjab",
+    
+    "Chandigarh": "Chandigarh",
+    
+    "Patna": "Bihar",
+    
+    "Raipur": "Chhattisgarh",
+    
+    "Bhubaneswar": "Odisha",
+    "Cuttack": "Odisha",
+    "Rourkela": "Odisha",
+    
+    "Guwahati": "Assam",
+    
+    "Srinagar": "Jammu and Kashmir"
+  };
+  
+  return stateMapping[locationName as keyof typeof stateMapping];
+}
+
 export function extractLocationsFromText(text: string): ExtractedLocation[] {
   const locations: ExtractedLocation[] = [];
-  const words = text.toLowerCase().split(/[\s,\.;!?]+/).filter(word => word.length > 1);
+  const detectedScript = detectScript(text);
   
-  // Check direct mappings first
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-    const twoWordPhrase = i < words.length - 1 ? `${word} ${words[i + 1]}` : "";
+  // Enhanced preprocessing for multilingual text
+  const segments = preprocessMultilingualText(text);
+  
+  // Check direct mappings first - both single words and phrases
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
     
-    // Check two-word phrases first
-    if (twoWordPhrase && LOCATION_MAPPINGS.has(twoWordPhrase)) {
-      locations.push({
-        original: twoWordPhrase,
-        standardized: LOCATION_MAPPINGS.get(twoWordPhrase)!,
-        confidence: 0.95,
-      });
-      i++; // Skip next word as it's part of the phrase
-      continue;
+    // Check 3-word phrases first (for locations like "Jammu and Kashmir")
+    if (i < segments.length - 2) {
+      const threeWordPhrase = `${segment} ${segments[i + 1]} ${segments[i + 2]}`;
+      if (LOCATION_MAPPINGS.has(threeWordPhrase)) {
+        locations.push({
+          original: threeWordPhrase,
+          standardized: LOCATION_MAPPINGS.get(threeWordPhrase)!,
+          confidence: 0.98,
+          state: inferStateFromLocation(LOCATION_MAPPINGS.get(threeWordPhrase)!)
+        });
+        i += 2; // Skip next two words
+        continue;
+      }
     }
     
-    // Check single words
-    if (LOCATION_MAPPINGS.has(word)) {
+    // Check 2-word phrases
+    if (i < segments.length - 1) {
+      const twoWordPhrase = `${segment} ${segments[i + 1]}`;
+      if (LOCATION_MAPPINGS.has(twoWordPhrase)) {
+        locations.push({
+          original: twoWordPhrase,
+          standardized: LOCATION_MAPPINGS.get(twoWordPhrase)!,
+          confidence: 0.95,
+          state: inferStateFromLocation(LOCATION_MAPPINGS.get(twoWordPhrase)!)
+        });
+        i++; // Skip next word
+        continue;
+      }
+    }
+    
+    // Check single words/segments
+    if (LOCATION_MAPPINGS.has(segment)) {
       locations.push({
-        original: word,
-        standardized: LOCATION_MAPPINGS.get(word)!,
+        original: segment,
+        standardized: LOCATION_MAPPINGS.get(segment)!,
         confidence: 0.90,
+        state: inferStateFromLocation(LOCATION_MAPPINGS.get(segment)!)
       });
     }
   }
   
-  // Fuzzy matching for unmatched potential locations
+  // Enhanced fuzzy matching for unmatched potential locations
   const locationNames = Array.from(LOCATION_MAPPINGS.values());
-  const potentialLocations = words.filter(word => 
-    word.length > 2 && 
-    !locations.some(loc => loc.original.includes(word))
-  );
+  const mappingKeys = Array.from(LOCATION_MAPPINGS.keys());
+  
+  const potentialLocations = segments.filter(segment => {
+    // More sophisticated filtering for potential locations
+    if (segment.length < 3) return false;
+    if (locations.some(loc => loc.original.includes(segment))) return false;
+    
+    // Skip common English words that are not locations
+    const commonWords = ['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'its', 'may', 'new', 'now', 'old', 'see', 'two', 'way', 'who', 'boy', 'did', 'man', 'men', 'put', 'say', 'she', 'too', 'use'];
+    if (commonWords.includes(segment.toLowerCase())) return false;
+    
+    return true;
+  });
   
   for (const potential of potentialLocations) {
-    const match = findBestMatch(potential, locationNames);
-    if (match && !locations.some(loc => loc.standardized === match.match)) {
+    // Try fuzzy matching against both standardized names and mapping keys
+    const standardMatch = findBestMatch(potential, locationNames);
+    const keyMatch = findBestMatch(potential, mappingKeys);
+    
+    let bestMatch = null;
+    if (standardMatch && keyMatch) {
+      bestMatch = standardMatch.confidence > keyMatch.confidence ? standardMatch : 
+                  { match: LOCATION_MAPPINGS.get(keyMatch.match)!, confidence: keyMatch.confidence };
+    } else if (standardMatch) {
+      bestMatch = standardMatch;
+    } else if (keyMatch) {
+      bestMatch = { match: LOCATION_MAPPINGS.get(keyMatch.match)!, confidence: keyMatch.confidence };
+    }
+    
+    if (bestMatch && !locations.some(loc => loc.standardized === bestMatch!.match)) {
       locations.push({
         original: potential,
-        standardized: match.match,
-        confidence: match.confidence,
+        standardized: bestMatch.match,
+        confidence: bestMatch.confidence * 0.8, // Reduce confidence for fuzzy matches
+        state: inferStateFromLocation(bestMatch.match)
       });
     }
   }
   
-  return locations;
+  // Sort by confidence and remove duplicates
+  const uniqueLocations = locations.filter((loc, index, self) => 
+    index === self.findIndex(l => l.standardized === loc.standardized)
+  ).sort((a, b) => b.confidence - a.confidence);
+  
+  return uniqueLocations;
 }
 
 export function getLocationCoordinates(locationName: string): { latitude: number; longitude: number } | null {

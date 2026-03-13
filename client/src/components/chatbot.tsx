@@ -16,12 +16,12 @@ export default function Chatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Initialize with welcome message
+  // Initialize with enhanced multilingual welcome message
   useEffect(() => {
     setMessages([
       {
         id: "welcome",
-        message: "Hello! I can help you find location information and resource data. Try asking \"What's the food situation in Tamil Nadu?\" or \"Show me shelter availability in Delhi\"",
+        message: "Hello! I'm your multilingual Crisis Assistant. I can understand locations in multiple Indian languages and scripts. Try these examples:\n\n• \"What's the food situation in तमिलनाडु?\"\n• \"Show shelter in दिल्ली\"\n• \"Resources available in কলকাতা?\"\n• \"Food shortage in TN and MH areas\"\n• \"Emergency in বাংলাদেশ region\"",
         isUser: false,
         createdAt: new Date().toISOString(),
       }
@@ -197,4 +197,4 @@ export default function Chatbot() {
       )}
     </div>
   );
-}
+}//COHERE_API_KEY=your_actual_cohere_api_key

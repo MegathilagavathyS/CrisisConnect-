@@ -2,6 +2,8 @@
 
 This is an Intelligent Location Finder and Crisis Resource Dashboard designed for disaster management. The system extracts and standardizes place names from multilingual, unstructured text reports (SMS, social media, PDFs), resolves ambiguous locations using contextual clues, and provides real-time resource shortage analysis. It combines Natural Language Processing (NLP), geospatial intelligence, and humanitarian datasets into a unified platform with map visualization and AI chatbot interaction.
 
+**Enhanced Multilingual Support**: The system now supports comprehensive location extraction across multiple Indian languages and scripts including Hindi (Devanagari), Bengali, Tamil, Telugu, Kannada, Malayalam, Gujarati, Punjabi (Gurmukhi), and Oriya scripts, with over 250 location mappings covering states, cities, abbreviations, misspellings, and regional variations.
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -46,8 +48,10 @@ Currently implements a basic storage interface with in-memory fallback, designed
 
 **AI/NLP Processing**:
 - Cohere API for natural language understanding and chatbot responses
-- Custom NLP service for location extraction and standardization
-- Fuzzy matching algorithms for handling misspellings and abbreviations
+- Advanced multilingual NLP service supporting 9 Indian language scripts (Hindi, Bengali, Tamil, Telugu, Kannada, Malayalam, Gujarati, Punjabi, Oriya)
+- Comprehensive location mapping with 250+ entries covering abbreviations, misspellings, regional variations, and local names
+- Script detection and Unicode-aware text preprocessing for accurate multilingual processing
+- Enhanced fuzzy matching algorithms with confidence scoring for location disambiguation
 
 **Geospatial Services**:
 - Coordinate lookup functionality for location positioning

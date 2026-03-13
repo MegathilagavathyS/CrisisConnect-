@@ -14,9 +14,9 @@ export class CohereService {
   private baseUrl = "https://api.cohere.ai/v1";
 
   constructor() {
-    this.apiKey = process.env.COHERE_API_KEY || process.env.COHERE_KEY || "";
+    this.apiKey = process.env.CO_API_KEY || process.env.COHERE_API_KEY || process.env.COHERE_KEY || "";
     if (!this.apiKey) {
-      console.warn("COHERE_API_KEY not found in environment variables");
+      console.warn("COHERE_API_KEY not found in environment variables. Checked CO_API_KEY, COHERE_API_KEY, and COHERE_KEY.");
     }
   }
 

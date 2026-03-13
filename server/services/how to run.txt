@@ -1,0 +1,5 @@
+npm install
+npm run dev
+npm start
+$env:CO_API_KEY="jBneKdFZRfc0BQGwTXl1t54J71J7NX8KO9jBvAid"  // your cohere api id       
+npm run start

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import LocationExtractor from "@/components/location-extractor";
+import GeospatialQuery from "@/components/geospatial-query";
 import ResourceMap from "@/components/resource-map";
 import ResourceCharts from "@/components/resource-charts";
 import ResourceSummary from "@/components/resource-summary";
 import Chatbot from "@/components/chatbot";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin, Clock, RotateCcw } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MapPin, Clock, RotateCcw, Search, Globe } from "lucide-react";
 import { DashboardStats } from "@/lib/types";
 
 export default function Dashboard() {
@@ -57,11 +59,30 @@ export default function Dashboard() {
       <div className="flex h-screen">
         {/* Sidebar */}
         <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
-          {/* Location Extraction Panel */}
-          <LocationExtractor />
+          {/* Tabs for different functions */}
+          <Tabs defaultValue="location-extraction" className="flex-1 flex flex-col">
+            <TabsList className="grid w-full grid-cols-2 m-4">
+              <TabsTrigger value="location-extraction" className="text-xs">
+                <MapPin className="w-3 h-3 mr-1" />
+                Extract
+              </TabsTrigger>
+              <TabsTrigger value="geospatial-query" className="text-xs">
+                <Globe className="w-3 h-3 mr-1" />
+                Query
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="location-extraction" className="flex-1 mt-0">
+              <LocationExtractor />
+            </TabsContent>
+            
+            <TabsContent value="geospatial-query" className="flex-1 mt-0">
+              <GeospatialQuery />
+            </TabsContent>
+          </Tabs>
 
           {/* Quick Search */}
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-t border-gray-200">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Search</h2>
             <div className="relative">
               <Input
@@ -76,7 +97,9 @@ export default function Dashboard() {
           </div>
 
           {/* Resource Summary */}
-          <ResourceSummary stats={stats} />
+          <div className="p-6 border-t border-gray-200">
+            <ResourceSummary stats={stats} />
+          </div>
         </aside>
 
         {/* Main Content */}

@@ -68,8 +68,14 @@ export default function LocationExtractor() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             className="h-32 resize-none"
-            placeholder="Enter disaster report text here... 
-Example: Emergency in TN, food shortage in New Dlhi area. तमिलनाडु में बाढ़ की स्थिति।"
+            placeholder="Enter multilingual disaster report here...
+
+Examples to try:
+• Emergency in TN, food shortage in New Dlhi area. तमिलनाडु में बाढ़ की स्थिति।
+• Resources needed in कर्नाटक and পশ্চিমবঙ্গ areas urgently
+• Flooding reported in তামিল নাড়ু, shelter crisis in MH
+• Medical supplies low in బెంగళూరు, water shortage in چنئی
+• Critical situation in ગુજરાત region, food needed in কেরল"
           />
         </div>
         <Button 
